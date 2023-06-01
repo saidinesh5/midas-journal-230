@@ -42,8 +42,8 @@ LiveWireImageFunction<TInputImage>
   this->m_UseFaceConnectedness = true;
   this->m_UseImageSpacing = true;
 
-  this->m_ZeroCrossingImage = NULL;
-  this->m_MaskImage = NULL;
+  this->m_ZeroCrossingImage = nullptr;
+  this->m_MaskImage = nullptr;
 
   this->m_InsidePixelValue = NumericTraits<MaskPixelType>::One;
 
@@ -176,7 +176,7 @@ LiveWireImageFunction<TInputImage>
 				unsigned int sumOffset = 0; 
 				for ( unsigned int d = 0; d < ImageDimension; d++ )
 						{
-						sumOffset += vnl_math_abs( offset[d] );
+                                    sumOffset += std::abs( offset[d] );
 						if ( this->m_UseImageSpacing )
 								{
 								scaleFactors[n] += ( static_cast<RealType>( offset[d] * offset[d] ) 
@@ -199,7 +199,7 @@ LiveWireImageFunction<TInputImage>
 						}
     if ( scaleFactors[n] > 0 )
       {
-      scaleFactors[n] = vcl_sqrt( scaleFactors[n] );
+                        scaleFactors[n] = std::sqrt( scaleFactors[n] );
       } 
     }   
 
@@ -287,13 +287,13 @@ LiveWireImageFunction<TInputImage>
 										= neighborPoint - centerPoint;
 								RealType vectorNorm = vector.GetNorm();            
 
-								RealType centerMin = vnl_math_min( centerGradient * vector, 
-										centerGradient * -vector );            
-								RealType neighborMin = vnl_math_min( neighborGradient * vector, 
-										neighborGradient * -vector );            
+                                RealType centerMin = std::min( centerGradient * vector,
+                                        centerGradient * -vector );
+                                RealType neighborMin = std::min( neighborGradient * vector,
+                                        neighborGradient * -vector );
 
-								fd = 1.0 - ( vcl_acos( centerMin / ( centerNorm * vectorNorm ) ) +  
-										vcl_acos( neighborMin / ( neighborNorm * vectorNorm ) ) )
+                                fd = 1.0 - ( std::acos( centerMin / ( centerNorm * vectorNorm ) ) +
+                                            std::acos( neighborMin / ( neighborNorm * vectorNorm ) ) )
 										/ vnl_math::pi;
 								}
 
@@ -328,7 +328,7 @@ LiveWireImageFunction<TInputImage>
   if ( !this->IsInsideBuffer( index ) )
     {
     itkWarningMacro( "Requested index is not inside buffer." );
-    return NULL;
+    return nullptr;
     }
 
   if ( this->m_MaskImage && 
@@ -336,7 +336,7 @@ LiveWireImageFunction<TInputImage>
          != this->m_InsidePixelValue )
     {
     itkWarningMacro( "The index is outside the user-defined mask region." ); 
-    return NULL;
+    return nullptr;
     }    
 
   typename OutputType::Pointer output = OutputType::New();

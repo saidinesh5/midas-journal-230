@@ -22,6 +22,7 @@
 #include "itkGradientImageFilter.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkPriorityQueueContainer.h"
+#include "itkMacro.h"
 
 #include <vector>
 #include <queue>
@@ -44,9 +45,8 @@ namespace itk
  */
 template <class TInputImage>
 class ITK_EXPORT LiveWireImageFunction 
-: public ImageFunction<TInputImage, 
-         typename itk::PolyLineParametricPath<
-           ::itk::GetImageDimension<TInputImage>::ImageDimension >::Pointer >
+: public ImageFunction<TInputImage,
+         typename itk::PolyLineParametricPath<TInputImage::ImageDimension >::Pointer >
 {
 
 public:
